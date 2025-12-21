@@ -66,7 +66,7 @@ app.use(
 // NOTE: testing route: verifing the api running or not
 app.get("/api", async (req, res, next) => {
   try {
-    return handleResponse(res, 200, `Hello there !! Welcome to workflow testing API ! \n API is running successfully \n sec var: ${process.env.MYNAM}`);
+    return handleResponse(res, 200, `Hello there !! Welcome to testing jenkins ci/cd pipeline API ! \n API is running successfully \n sec var: ${process.env.MYNAM}`);
   } catch (error) {
     return next(error);
   }
