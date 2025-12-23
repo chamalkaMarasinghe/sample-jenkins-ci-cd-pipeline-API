@@ -1,0 +1,25 @@
+name: Trigger Jenkinss
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  trigger-jenkins:
+    runs-on: ubuntu-latest
+    environment: dev
+
+    steps:
+      - name: Call Jenkins Build and Deploy Pipeline
+        run: |
+          curl -X POST "http://20.193.255.237/job/Build%20and%20deploy/buildWithParameters" \
+            --user "${{ vars.JENKINS_USER }}:${{ secrets.JENKINS_API_TOKEN }}" \
+            --data-urlencode token=${{ secrets.JENKINS_TRIGGER_SECRET }} \
+            --data-urlencode REMOTE_HOST=${{ vars.REMOTE_HOST }} \
+            --data-urlencode REMOTE_USER=${{ vars.REMOTE_USER }} \
+            --data-urlencode APP_DIR=${{ vars.APP_DIR }} \
+            --data-urlencode REPO_URL=${{ vars.REPO_URL }} \
+            --data-urlencode BRANCH=${{ vars.BRANCH }} \
+            --data-urlencode DOPPLER_PROJECT=${{ vars.DOPPLER_PROJECT }} \
+            --data-urlencode DOPPLER_CONFIG=${{ vars.DOPPLER_CONFIG }}
