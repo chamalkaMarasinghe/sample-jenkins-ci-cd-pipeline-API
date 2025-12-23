@@ -14,14 +14,11 @@ jobs:
       - name: Call Jenkins Build and Deploy Pipeline
         run: |
           CRUMB=$(curl -s \
-            -u "${{ vars.JENKINS_USER }}:${{ secrets.JENKINS_API_TOKEN }}" \
-            http://20.193.255.237/crumbIssuer/api/json \
-            | jq -r '.crumbRequestField + ":" + .crumb')
-      
-          echo "Crumb fetched: $CRUMB"
+            --user "${{ vars.JENKINS_USER }}:${{ secrets.JENKINS_API_TOKEN }}" \
+            "http://20.193.255.237/crumbIssuer/api/xml?xpath=concat(//crumbRequestField,\":\",//crumb)")
       
           curl -X POST \
-            -u "${{ vars.JENKINS_USER }}:${{ secrets.JENKINS_API_TOKEN }}" \
+            --user "${{ vars.JENKINS_USER }}:${{ secrets.JENKINS_API_TOKEN }}" \
             -H "$CRUMB" \
             "http://20.193.255.237/job/Build%20and%20deploy/buildWithParameters" \
             --data-urlencode token=${{ secrets.JENKINS_TRIGGER_SECRET }} \
