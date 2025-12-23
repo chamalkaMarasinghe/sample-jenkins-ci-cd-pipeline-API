@@ -13,7 +13,7 @@ jobs:
     steps:
       - name: Call Jenkins Build and Deploy Pipeline
         run: | 
-          curl -X POST "http://20.193.255.237/job/Build%20and%20Deploy/buildWithParameters" \
+          curl -X POST "http://20.193.255.237/job/Build%20and%20deploy/buildWithParameters" \
             --user "${{ vars.JENKINS_USER }}:${{ secrets.JENKINS_API_TOKEN }}" \
             --data-urlencode token=${{ secrets.JENKINS_TRIGGER_SECRET }} \
             --data-urlencode REMOTE_HOST=${{ vars.REMOTE_HOST }} \
