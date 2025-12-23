@@ -12,9 +12,15 @@ jobs:
 
     steps:
       - name: Call Jenkins Build and Deploy Pipeline
-        run: | 
-          curl -X POST "http://20.193.255.237/job/Build%20and%20deploy/buildWithParameters" \
+        run: |
+          CRUMB=$(curl -s \
             --user "${{ vars.JENKINS_USER }}:${{ secrets.JENKINS_API_TOKEN }}" \
+            "http://20.193.255.237/crumbIssuer/api/xml?xpath=concat(//crumbRequestField,\":\",//crumb)")
+      
+          curl -X POST \
+            --user "${{ vars.JENKINS_USER }}:${{ secrets.JENKINS_API_TOKEN }}" \
+            -H "$CRUMB" \
+            "http://20.193.255.237/job/Build-and-Deploy/buildWithParameters" \
             --data-urlencode token=${{ secrets.JENKINS_TRIGGER_SECRET }} \
             --data-urlencode REMOTE_HOST=${{ vars.REMOTE_HOST }} \
             --data-urlencode REMOTE_USER=${{ vars.REMOTE_USER }} \
