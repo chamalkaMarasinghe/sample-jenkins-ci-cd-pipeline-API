@@ -19,9 +19,6 @@ const { startupMethod } = require("./config/startupMethod.js");
 const { initSocket } = require("./sockets/initSocket.js");
 const { authenticateSocket } = require("./middlewares/authenticateSocket.js");
 
-// NOTE: importing routes
-const AuthRoutes = require("./routes/auth.js");
-
 // NOTE: building the current environment according to env variables
 const currentEnvironment = require("./config/environmentConfig");
 const {
@@ -32,6 +29,10 @@ const { environmentTypes } = require("./constants/commonConstants.js");
 
 const PORT = currentEnvironment.PORT;
 const CLIENT = currentEnvironment.CLIENT;
+
+// NOTE: importing routes
+const AuthRoutes = require("./routes/auth.js");
+const logger = require("./logger/index.js");
 
 const app = express();
 
@@ -67,7 +68,11 @@ app.use(
 // NOTE: testing route: verifing the api running or not
 app.get("/api", async (req, res, next) => {
   try {
-    return handleResponse(res, 200, `Hello there !>>>! Welcome to testing jenkins ci/cd pipeline API ! \n API is running successfully \n sec var: ${process.env.MYNAM}`);
+    logger.info('Server started : logger output', { port: 5008 });
+    logger.info('custom info log'); 
+    logger.error('Something failed', { error: "ocurred custom error" });
+    console.log("api successfully up and running");
+    return handleResponse(res, 200, `Hello there !>loki>>! Welcome to testing jenkins ci/cd pipeline API ! \n API is running successfully \n sec var: ${process.env.MYNAM}`);
   } catch (error) {
     return next(error);
   }
