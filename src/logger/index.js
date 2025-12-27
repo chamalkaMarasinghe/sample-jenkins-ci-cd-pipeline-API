@@ -27,16 +27,6 @@ const dev_logger = () => {
         ),
         transports: [
             new winston.transports.Console(), // for Docker stdout
-            // new LogtailTransport(logtail), // send to cloud
-            new LokiTransport({
-                host: environment.GRAFANA_LOKI_ENDPOINT,
-                basicAuth: `${environment.GRAFANA_LOKI_USER}:${environment.GRAFANA_LOKI_API_KEY}`,
-                onConnectionError: (err) => {
-                    console.error("Loki connection error:", err);
-                },
-                labels: { app: "my-node-api" },
-                json: true
-            }),
         ],
     });
 };
@@ -53,16 +43,6 @@ const prod_logger = () => {
         ),
         transports: [
             new winston.transports.Console(), // for Docker stdout
-            // new LogtailTransport(logtail), // send to cloud
-            new LokiTransport({
-                host: environment.GRAFANA_LOKI_ENDPOINT,
-                basicAuth: `${environment.GRAFANA_LOKI_USER}:${environment.GRAFANA_LOKI_API_KEY}`,
-                onConnectionError: (err) => {
-                    console.error("Loki connection error:", err);
-                },
-                labels: { app: "my-node-api" },
-                json: true
-            }),
         ],
     });
 };
@@ -75,16 +55,104 @@ if(environment.ENVIRONMENT === environmentTypes.PROD){
 
 }
 
-// console.log(">>>>>>>>>>>>>>>>>>>>>> LOGGER");
-// // console.log(Object.keys(logger));
-// console.log(logger._readableState.pipes[1]);
-
-
-
 module.exports = logger;
 
 
-// >>>>>>>>>>>>>>>>>>>>>>>>> // NOTE: COMMENT 
+
+
+
+
+
+
+// NOTE: >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> COMMENT >>>>>>>>>>>>>>>>>>>>
+
+// const winston = require("winston");
+// const { Logtail } = require("@logtail/node");
+// // const { LogtailTransport } = require("winston-transport-logtail");
+// const LokiTransport = require('winston-loki');
+// const environment = require("../config/environmentConfig");
+// const { environmentTypes } = require("../constants/commonConstants");
+
+// const customFormat = winston.format.printf(
+//     ({ level, message, timestamp, stack, ...meta }) => {
+//         const metaString = Object.keys(meta).length
+//             ? JSON.stringify(meta, null, 2)
+//             : "";
+
+//         return `${timestamp} [${level}]: ${stack || message} ${metaString}`;
+//     }
+// );
+
+// const dev_logger = () => {
+//     return winston.createLogger({
+//         level: "info",
+//         format: winston.format.combine(
+//             winston.format.colorize(),
+//             winston.format.timestamp(),
+//             customFormat
+//             // winston.format.errors({ stack: true }),
+//             // winston.format.json()
+//         ),
+//         transports: [
+//             new winston.transports.Console(), // for Docker stdout
+//             // new LogtailTransport(logtail), // send to cloud
+//             new LokiTransport({
+//                 host: environment.GRAFANA_LOKI_ENDPOINT,
+//                 basicAuth: `${environment.GRAFANA_LOKI_USER}:${environment.GRAFANA_LOKI_API_KEY}`,
+//                 onConnectionError: (err) => {
+//                     console.error("Loki connection error:", err);
+//                 },
+//                 labels: { app: "my-node-api" },
+//                 json: true
+//             }),
+//         ],
+//     });
+// };
+
+// const prod_logger = () => {
+//     return winston.createLogger({
+//         level: "info",
+//         format: winston.format.combine(
+//             // winston.format.colorize(),
+//             winston.format.timestamp(),
+//             customFormat
+//             // winston.format.errors({ stack: true }),
+//             // winston.format.json()
+//         ),
+//         transports: [
+//             new winston.transports.Console(), // for Docker stdout
+//             // new LogtailTransport(logtail), // send to cloud
+//             new LokiTransport({
+//                 host: environment.GRAFANA_LOKI_ENDPOINT,
+//                 basicAuth: `${environment.GRAFANA_LOKI_USER}:${environment.GRAFANA_LOKI_API_KEY}`,
+//                 onConnectionError: (err) => {
+//                     console.error("Loki connection error:", err);
+//                 },
+//                 labels: { app: "my-node-api" },
+//                 json: true
+//             }),
+//         ],
+//     });
+// };
+
+// // NOTE: injectingrespective logger based on the current environment
+// let logger = dev_logger();
+
+// if(environment.ENVIRONMENT === environmentTypes.PROD){
+//     logger = prod_logger();
+
+// }
+
+// // console.log(">>>>>>>>>>>>>>>>>>>>>> LOGGER");
+// // // console.log(Object.keys(logger));
+// // console.log(logger._readableState.pipes[1]);
+
+
+
+// module.exports = logger;
+
+
+// NOTE: >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> COMMENT >>>>>>>>>>>>>>>>>>>>>>>>>>>>>> 
 
 // const winston = require("winston");
 // const LokiTransport = require("winston-loki");

@@ -71,7 +71,7 @@ app.get("/api", async (req, res, next) => {
     logger.info('Server started : logger output', { port: 5008 });
     logger.info('custom info log'); 
     logger.error('Something failed', { error: "ocurred custom error" });
-    console.log("api successfully up and running");
+    console.log("Hello there ! Welcome to testing jenkins ci/cd pipeline API !");
     return handleResponse(res, 200, `Hello there !>loki>>! Welcome to testing jenkins ci/cd pipeline API ! \n API is running successfully \n sec var: ${process.env.MYNAM}`);
   } catch (error) {
     return next(error);
