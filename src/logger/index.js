@@ -31,6 +31,9 @@ const dev_logger = () => {
             new LokiTransport({
                 host: environment.GRAFANA_LOKI_ENDPOINT,
                 basicAuth: `${environment.GRAFANA_LOKI_USER}:${environment.GRAFANA_LOKI_API_KEY}`,
+                onConnectionError: (err) => {
+                    console.error("Loki connection error:", err);
+                },
                 labels: { app: "my-node-api" },
                 json: true
             }),
@@ -54,6 +57,9 @@ const prod_logger = () => {
             new LokiTransport({
                 host: environment.GRAFANA_LOKI_ENDPOINT,
                 basicAuth: `${environment.GRAFANA_LOKI_USER}:${environment.GRAFANA_LOKI_API_KEY}`,
+                onConnectionError: (err) => {
+                    console.error("Loki connection error:", err);
+                },
                 labels: { app: "my-node-api" },
                 json: true
             }),
@@ -68,6 +74,13 @@ if(environment.ENVIRONMENT === environmentTypes.PROD){
     logger = prod_logger();
 
 }
+
+// console.log(">>>>>>>>>>>>>>>>>>>>>> LOGGER");
+// // console.log(Object.keys(logger));
+// console.log(logger._readableState.pipes[1]);
+
+
+
 module.exports = logger;
 
 
