@@ -32,6 +32,7 @@ const CLIENT = currentEnvironment.CLIENT;
 
 // NOTE: importing routes
 const AuthRoutes = require("./routes/auth.js");
+const fileRoutes = require("./routes/file.js");
 const logger = require("./logger/index.js");
 
 const app = express();
@@ -64,6 +65,9 @@ app.use(
     credentials: true,
   })
 );
+
+// NOTE: defining routes
+app.use(`/api/v1/file`, fileRoutes);
 
 // NOTE: testing route: verifing the api running or not
 app.get("/api", async (req, res, next) => {
