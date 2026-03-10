@@ -1,5 +1,3 @@
-// build images separattely nad push docker hub
-
 pipeline {
   agent any
   options {
@@ -78,7 +76,7 @@ pipeline {
       }
     }
 
-    stage('Build Docker Images on Remote VM') {
+    stage('Docker Compose Build & Deploy') {
       steps {
         sshagent(credentials: ['azure-ssh-key']) {
           sh """
@@ -143,8 +141,34 @@ pipeline {
         }
       }
     }
-  }
 
+    stage('Deploy with Docker Compose') {
+      steps {
+        sshagent(credentials: ['azure-ssh-key']) {
+          sh """
+            ssh ${env.SSH_OPTIONS} ${params.REMOTE_USER}@${params.REMOTE_HOST} '
+              set -e
+              echo "🚀 Deploying application..."
+              cd ${params.APP_DIR}
+
+              # Pull latest images from Docker Hub
+              docker-compose pull || docker compose pull
+
+              # Restart containers with new images
+              docker-compose down --remove-orphans
+              docker-compose up -d || docker compose up -d
+
+              echo "✅ Application deployed successfully"
+
+              # Cleanup unused Docker resources
+              echo "🧹 Cleaning up unused Docker resources..."
+              docker system prune -f
+            '
+          """
+        }
+      }
+    }
+  }
 
   post {
     always {
